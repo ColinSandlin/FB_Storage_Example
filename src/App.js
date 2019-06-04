@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Route exact path="/profiles/new" component={ProfileForm}></Route>
+        <Route exact path="/profiles/new" component={ProfileForm} ></Route>
         <Route exact path="/profiles" component={ProfileList}></Route>
       </Router>
     </div>

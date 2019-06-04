@@ -1,14 +1,32 @@
 import React from 'react';
-import { Header, Form, Grid, Button } from 'semantic-ui-react';
+import { Header, Form, Grid, Button, Ref } from 'semantic-ui-react';
+import { saveProfile } from "../APIManager/profiles"
+import * as firebase from "firebase/app";
+import 'firebase/storage';
+
+
 
 class ProfileForm extends React.Component {
+  storageRef = firebase.storage().ref('profiles')
+
   state = {
     username: '',
-    aboutMe: ''
+    aboutMe: '',
+    photoUrl: null
   };
 
   saveProfile = () => {
-    console.log('Do Stuff');
+    const ref = this.storageRef.child(`${Date.now()}`)
+    ref.put(this.state.photo)
+      .then(data => data.ref.getDownloadURL())
+      .then(url => {
+        saveProfile({
+          username: this.state.username,
+          aboutMe: this.state.aboutMe,
+          photoUrl: url
+        });
+      })
+      .then(() => this.props.history.push("/profiles"))
   }
 
   render() {
@@ -32,6 +50,12 @@ class ProfileForm extends React.Component {
                   type="text"
                   label="About"
                   onChange={(e) => this.setState({ aboutMe: e.target.value })}
+                  placeholder="About me" />
+                <Form.Field
+                  control="input"
+                  type="file"
+                  label="ProfPic"
+                  onChange={(e) => this.setState({ photo: e.target.files[0] })}
                   placeholder="About me" />
                 <Button type="submit" content="Save" color="purple" />
               </Form>

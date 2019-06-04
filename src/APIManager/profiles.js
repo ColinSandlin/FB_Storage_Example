@@ -1,4 +1,4 @@
-const url = 'http://localhost:8088/profiles';
+const url = 'http://localhost:8089/profiles';
 
 export const getProfiles = () => {
   return fetch(url).then(res => res.json());
